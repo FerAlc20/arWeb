@@ -1,14 +1,9 @@
-// AHORA LAS IMPORTACIONES SON LIMPIAS GRACIAS AL IMPORT MAP
 import * as THREE from 'three';
 import { ARButton } from 'three/addons/webxr/ARButton.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
 let container;
 let camera, scene, renderer;
-let controller;
-let reticle;
-let hitTestSource = null;
-let hitTestSourceRequested = false;
 let horseModel = null;
 
 init();
@@ -32,40 +27,28 @@ function init() {
     renderer.xr.enabled = true;
     container.appendChild(renderer.domElement);
 
-    // Botón AR
-    document.body.appendChild(ARButton.createButton(renderer, { requiredFeatures: ['hit-test'] }));
+    // --- TRUCO: Sin 'requiredFeatures' ---
+    // Al no pedir 'hit-test', muchos celulares saltan la comprobación estricta de ARCore
+    // Usamos 'optionalFeatures' solo por si acaso
+    document.body.appendChild(ARButton.createButton(renderer, { 
+        optionalFeatures: ['dom-overlay'], 
+        domOverlay: { root: document.body } 
+    }));
 
     // Cargar Modelo
     const loader = new GLTFLoader();
     loader.load('Horse.glb', function (gltf) {
         horseModel = gltf.scene;
-        horseModel.scale.set(0.005, 0.005, 0.005);
-        console.log("Caballo cargado");
+        // Escala ajustada
+        horseModel.scale.set(0.002, 0.002, 0.002); 
+        // Posición: 1.5 metros al frente y un poco abajo
+        horseModel.position.set(0, -0.5, -1.5); 
+        
+        scene.add(horseModel); 
+        console.log("Caballo añadido (Modo Flotante)");
     });
 
-    // Retícula
-    const geometry = new THREE.RingGeometry(0.15, 0.2, 32).rotateX(-Math.PI / 2);
-    const material = new THREE.MeshBasicMaterial();
-    reticle = new THREE.Mesh(geometry, material);
-    reticle.matrixAutoUpdate = false;
-    reticle.visible = false;
-    scene.add(reticle);
-
-    // Controller
-    controller = renderer.xr.getController(0);
-    controller.addEventListener('select', onSelect);
-    scene.add(controller);
-
     window.addEventListener('resize', onWindowResize);
-}
-
-function onSelect() {
-    if (reticle.visible && horseModel) {
-        const newHorse = horseModel.clone();
-        newHorse.position.setFromMatrixPosition(reticle.matrix);
-        newHorse.quaternion.setFromRotationMatrix(reticle.matrix);
-        scene.add(newHorse);
-    }
 }
 
 function onWindowResize() {
@@ -78,34 +61,6 @@ function animate() {
     renderer.setAnimationLoop(render);
 }
 
-function render(timestamp, frame) {
-    if (frame) {
-        const referenceSpace = renderer.xr.getReferenceSpace();
-        const session = renderer.xr.getSession();
-
-        if (hitTestSourceRequested === false) {
-            session.requestReferenceSpace('viewer').then(function (referenceSpace) {
-                session.requestHitTestSource({ space: referenceSpace }).then(function (source) {
-                    hitTestSource = source;
-                });
-            });
-            session.addEventListener('end', function () {
-                hitTestSourceRequested = false;
-                hitTestSource = null;
-            });
-            hitTestSourceRequested = true;
-        }
-
-        if (hitTestSource) {
-            const hitTestResults = frame.getHitTestResults(hitTestSource);
-            if (hitTestResults.length > 0) {
-                const hit = hitTestResults[0];
-                reticle.visible = true;
-                reticle.matrix.fromArray(hit.getPose(referenceSpace).transform.matrix);
-            } else {
-                reticle.visible = false;
-            }
-        }
-    }
+function render() {
     renderer.render(scene, camera);
 }
