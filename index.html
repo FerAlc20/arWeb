@@ -1,32 +1,33 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <title>Proyecto AR - Evaluación</title>
+    <title>Proyecto AR Interactivo</title>
     <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
     <meta charset="utf-8">
     
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
 
+    <script src="script.js"></script>
+
     <style>
-        /* ESTILOS FORMALES */
         body {
             margin: 0;
             overflow: hidden;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        /* Barra de Título Superior */
+        /* ESTILOS DE BARRA SUPERIOR */
         .header {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
-            background-color: rgba(0, 0, 0, 0.7); /* Fondo oscuro semitransparente */
+            background-color: rgba(0, 0, 0, 0.7);
             color: white;
             padding: 15px 0;
             text-align: center;
-            z-index: 10; /* Para que quede encima de la cámara */
+            z-index: 10;
             box-shadow: 0 2px 5px rgba(0,0,0,0.5);
         }
 
@@ -38,18 +39,18 @@
             text-transform: uppercase;
         }
 
-        /* Footer (Pie de Página) */
+        /* ESTILOS DEL FOOTER */
         .footer {
             position: absolute;
             bottom: 0;
             left: 0;
             width: 100%;
-            background-color: #1a1a1a; /* Color serio y formal */
+            background-color: #1a1a1a;
             color: #d1d1d1;
             padding: 10px 0;
             text-align: center;
             z-index: 10;
-            border-top: 3px solid #007bff; /* Una línea de color acento */
+            border-top: 3px solid #007bff;
             font-size: 12px;
         }
 
@@ -62,26 +63,39 @@
 <body>
 
     <div class="header">
-        <h1>Visualización de Modelo 3D</h1>
+        <h1>Modelo Interactivo 3D</h1>
     </div>
 
-    <a-scene embedded arjs vr-mode-ui="enabled: false">
+    <a-scene 
+        embedded arjs 
+        vr-mode-ui="enabled: false"
+        gesture-detector
+        renderer="logarithmicDepthBuffer: true;"
+        id="scene">
         
-        <a-marker preset="hiro">
+        <a-marker 
+            preset="hiro" 
+            raycaster="objects: .clickable" 
+            emitevents="true" 
+            cursor="fuse: false; rayOrigin: mouse;">
+            
             <a-entity 
+                id="modelo-caballo"
                 position="0 0 0" 
+                rotation="0 -90 0"
                 scale="0.01 0.01 0.01" 
-                gltf-model="url(Horse.glb)"
-                animation="property: rotation; to: 0 360 0; loop: true; dur: 8000; easing: linear">
+                class="clickable"
+                gesture-handler="minScale: 0.2; maxScale: 5; rotationFactor: 10"
+                gltf-model="url(Horse.glb)">
             </a-entity>
+
         </a-marker>
 
         <a-entity camera></a-entity>
-        
     </a-scene>
 
     <div class="footer">
-        <p>&copy; 2025 Fernanda Alcántara | Proyecto de Evaluación</p>
+        <p>&copy; 2025 Fernanda Alcántara | RA Web </p>
     </div>
 
 </body>
