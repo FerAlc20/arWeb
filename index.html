@@ -1,32 +1,26 @@
 <!DOCTYPE html>
-<html lang="es">
-<head>
-    <title>WebXR AR - Three.js</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <style>
-        body { margin: 0; padding: 0; overflow: hidden; }
-        #info {
-            position: absolute; top: 20px; width: 100%; text-align: center;
-            color: white; font-family: sans-serif; pointer-events: none;
-            text-shadow: 1px 1px 2px black; font-size: 14px; z-index: 1;
-        }
-    </style>
-
-    <script type="importmap">
-    {
-        "imports": {
-            "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
-            "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
-        }
-    }
-    </script>
-</head>
-<body>
-
-    <div id="info">Mueve el celular para detectar el suelo, luego toca para colocar el caballo</div>
-
-    <script type="module" src="./script.js"></script>
-
-</body>
+<html>
+  <head>
+    <title>AR Universal - Evaluación</title>
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+  </head>
+  <body style="margin : 0px; overflow: hidden;">
+    
+    <a-scene embedded arjs>
+      
+      <a-marker preset="hiro">
+          <a-entity 
+            position="0 0 0" 
+            scale="0.05 0.05 0.05" 
+            gltf-model="url(Horse.glb)"
+            animation="property: rotation; to: 0 360 0; loop: true; dur: 5000">
+          </a-entity>
+      </a-marker>
+      
+      <a-entity camera></a-entity>
+      
+    </a-scene>
+  </body>
 </html>
