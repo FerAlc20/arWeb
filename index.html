@@ -1,35 +1,71 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <title>AR CORREGIDO v10</title>
+    <title>Proyecto AR Final</title>
     <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
     <meta charset="utf-8">
     
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
 
-    <script src="script.js?v=10"></script>
+    <script src="script.js?v=12"></script>
 
     <style>
-        body { margin: 0; overflow: hidden; font-family: 'Segoe UI', sans-serif; }
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* CABECERA ELEGANTE */
         .header {
-            position: absolute; top: 0; left: 0; width: 100%;
-            background-color: #d32f2f; /* CAMBIÉ A ROJO para que sepas que se actualizó */
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.7); /* Negro semitransparente */
             color: white;
-            padding: 15px 0; text-align: center; z-index: 10;
+            padding: 15px 0;
+            text-align: center;
+            z-index: 10;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px); /* Efecto vidrio borroso moderno */
         }
+
+        .header h1 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* PIE DE PÁGINA FORMAL */
         .footer {
-            position: absolute; bottom: 0; left: 0; width: 100%;
-            background-color: #1a1a1a; color: #d1d1d1;
-            padding: 10px 0; text-align: center; z-index: 10;
-            border-top: 3px solid #d32f2f; font-size: 12px;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #1a1a1a; /* Gris muy oscuro */
+            color: #d1d1d1; /* Texto gris suave */
+            padding: 10px 0;
+            text-align: center;
+            z-index: 10;
+            border-top: 3px solid #007bff; /* Línea de acento azul profesional */
+            font-size: 12px;
         }
-        p { margin: 0; }
+
+        .footer p {
+            margin: 0;
+        }
     </style>
 </head>
 
 <body>
-    <div class="header"><h1>MODELO ACTUALIZADO (ROJO)</h1></div>
+
+    <div class="header">
+        <h1>Modelo Interactivo 3D</h1>
+    </div>
 
     <a-scene 
         embedded arjs 
@@ -48,7 +84,7 @@
                 id="modelo-caballo"
                 position="0 0 0" 
                 rotation="-90 0 0"
-                scale="0.05 0.05 0.05" 
+                scale="0.02 0.02 0.02" 
                 class="clickable"
                 gesture-handler
                 gltf-model="url(Horse.glb)">
@@ -59,6 +95,9 @@
         <a-entity camera></a-entity>
     </a-scene>
 
-    <div class="footer"><p>&copy; 2025 Fernanda Alcántara</p></div>
+    <div class="footer">
+        <p>&copy; 2025 Fernanda Alcántara | AR Web</p>
+    </div>
+
 </body>
 </html>
