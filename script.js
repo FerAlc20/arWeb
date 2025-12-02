@@ -1,9 +1,6 @@
-/* script.js
-   Contiene los componentes de A-Frame para interactividad táctil
-*/
+/* script.js - VERSIÓN ESTABILIZADA */
 
-// COMPONENTE 1: GESTURE DETECTOR
-// Escucha si hay 1 dedo (rotar) o 2 dedos (escalar) en la pantalla
+// 1. DETECTOR DE GESTOS (Detecta dedos)
 AFRAME.registerComponent("gesture-detector", {
     schema: { element: { default: "" } },
     init: function() {
@@ -72,14 +69,13 @@ AFRAME.registerComponent("gesture-detector", {
     }
 });
 
-// COMPONENTE 2: GESTURE HANDLER
-// Recibe la información del detector y modifica el tamaño/rotación del modelo
+// 2. MANEJADOR DE GESTOS (Lógica mejorada)
 AFRAME.registerComponent("gesture-handler", {
     schema: {
         enabled: { default: true },
-        rotationFactor: { default: 5 },
-        minScale: { default: 0.005 },
-        maxScale: { default: 0.08 },
+        rotationFactor: { default: 2 }, // Velocidad moderada
+        minScale: { default: 0.01 },    // No dejar que sea más pequeño que esto
+        maxScale: { default: 2 },       // No dejar que sea más grande que esto
     },
     init: function() {
         this.handleScale = this.handleScale.bind(this);
@@ -106,11 +102,9 @@ AFRAME.registerComponent("gesture-handler", {
     },
     handleRotation: function(event) {
         if (this.isVisible) {
-            // Rota en el eje Y (horizontal)
+            // Rotamos en Y (como un carrusel) y en X (para inclinarlo si quieres)
+            // Aquí solo activamos Y para que no se voltee de cabeza
             this.el.object3D.rotation.y += event.detail.positionChange.x * this.data.rotationFactor;
-            
-            // Si quieres rotar también arriba/abajo, descomenta esta línea:
-            // this.el.object3D.rotation.x += event.detail.positionChange.y * this.data.rotationFactor;
         }
     },
     handleScale: function(event) {
