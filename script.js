@@ -1,6 +1,5 @@
-/* script.js - VERSIÓN ESTABILIZADA */
+/* script.js */
 
-// 1. DETECTOR DE GESTOS (Detecta dedos)
 AFRAME.registerComponent("gesture-detector", {
     schema: { element: { default: "" } },
     init: function() {
@@ -69,13 +68,12 @@ AFRAME.registerComponent("gesture-detector", {
     }
 });
 
-// 2. MANEJADOR DE GESTOS (Lógica mejorada)
 AFRAME.registerComponent("gesture-handler", {
     schema: {
         enabled: { default: true },
-        rotationFactor: { default: 2 }, // Velocidad moderada
-        minScale: { default: 0.01 },    // No dejar que sea más pequeño que esto
-        maxScale: { default: 2 },       // No dejar que sea más grande que esto
+        rotationFactor: { default: 2 },
+        minScale: { default: 0.01 },
+        maxScale: { default: 3 },
     },
     init: function() {
         this.handleScale = this.handleScale.bind(this);
@@ -102,8 +100,6 @@ AFRAME.registerComponent("gesture-handler", {
     },
     handleRotation: function(event) {
         if (this.isVisible) {
-            // Rotamos en Y (como un carrusel) y en X (para inclinarlo si quieres)
-            // Aquí solo activamos Y para que no se voltee de cabeza
             this.el.object3D.rotation.y += event.detail.positionChange.x * this.data.rotationFactor;
         }
     },
@@ -111,7 +107,6 @@ AFRAME.registerComponent("gesture-handler", {
         if (this.isVisible) {
             this.scaleFactor *= 1 + event.detail.spreadChange / event.detail.startSpread;
             this.scaleFactor = Math.min(Math.max(this.scaleFactor, this.data.minScale), this.data.maxScale);
-
             this.el.object3D.scale.x = this.scaleFactor * this.initialScale.x;
             this.el.object3D.scale.y = this.scaleFactor * this.initialScale.y;
             this.el.object3D.scale.z = this.scaleFactor * this.initialScale.z;
