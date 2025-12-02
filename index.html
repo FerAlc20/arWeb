@@ -1,26 +1,88 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>AR Universal - Evaluación</title>
+<html lang="es">
+<head>
+    <title>Proyecto AR - Evaluación</title>
     <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <meta charset="utf-8">
+    
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
-  </head>
-  <body style="margin : 0px; overflow: hidden;">
-    
-    <a-scene embedded arjs>
-      
-      <a-marker preset="hiro">
-          <a-entity 
-            position="0 0 0" 
-            scale="0.05 0.05 0.05" 
-            gltf-model="url(Horse.glb)"
-            animation="property: rotation; to: 0 360 0; loop: true; dur: 5000">
-          </a-entity>
-      </a-marker>
-      
-      <a-entity camera></a-entity>
-      
+
+    <style>
+        /* ESTILOS FORMALES */
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* Barra de Título Superior */
+        .header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.7); /* Fondo oscuro semitransparente */
+            color: white;
+            padding: 15px 0;
+            text-align: center;
+            z-index: 10; /* Para que quede encima de la cámara */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* Footer (Pie de Página) */
+        .footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #1a1a1a; /* Color serio y formal */
+            color: #d1d1d1;
+            padding: 10px 0;
+            text-align: center;
+            z-index: 10;
+            border-top: 3px solid #007bff; /* Una línea de color acento */
+            font-size: 12px;
+        }
+
+        .footer p {
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <h1>Visualización de Modelo 3D</h1>
+    </div>
+
+    <a-scene embedded arjs vr-mode-ui="enabled: false">
+        
+        <a-marker preset="hiro">
+            <a-entity 
+                position="0 0 0" 
+                scale="0.01 0.01 0.01" 
+                gltf-model="url(Horse.glb)"
+                animation="property: rotation; to: 0 360 0; loop: true; dur: 8000; easing: linear">
+            </a-entity>
+        </a-marker>
+
+        <a-entity camera></a-entity>
+        
     </a-scene>
-  </body>
+
+    <div class="footer">
+        <p>&copy; 2025 Fernanda Alcántara | Proyecto de Evaluación</p>
+    </div>
+
+</body>
 </html>
