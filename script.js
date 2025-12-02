@@ -1,4 +1,4 @@
-/* script.js */
+/* script.js - VERSIÓN FINAL PARA EVALUACIÓN */
 
 AFRAME.registerComponent("gesture-detector", {
     schema: { element: { default: "" } },
@@ -71,17 +71,15 @@ AFRAME.registerComponent("gesture-detector", {
 AFRAME.registerComponent("gesture-handler", {
     schema: {
         enabled: { default: true },
-        rotationFactor: { default: 2 },
-        minScale: { default: 0.01 },
-        maxScale: { default: 3 },
+        rotationFactor: { default: 5 },
+        minScale: { default: 0.005 },
+        maxScale: { default: 0.08 },
     },
     init: function() {
         this.handleScale = this.handleScale.bind(this);
         this.handleRotation = this.handleRotation.bind(this);
         this.isVisible = false;
-        this.initialScale = this.el.object3D.scale.clone();
-        this.scaleFactor = 1;
-
+        
         this.el.sceneEl.addEventListener("markerFound", (e) => { this.isVisible = true; });
         this.el.sceneEl.addEventListener("markerLost", (e) => { this.isVisible = false; });
     },
@@ -100,16 +98,37 @@ AFRAME.registerComponent("gesture-handler", {
     },
     handleRotation: function(event) {
         if (this.isVisible) {
-            this.el.object3D.rotation.y += event.detail.positionChange.x * this.data.rotationFactor;
+            const sensitivity = 0.005; 
+            // Rotación Horizontal
+            this.el.object3D.rotation.y += event.detail.positionChange.x * this.data.rotationFactor * sensitivity;
+            // Rotación Vertical (Ver desde arriba/abajo)
+            this.el.object3D.rotation.x += event.detail.positionChange.y * this.data.rotationFactor * sensitivity;
         }
     },
     handleScale: function(event) {
         if (this.isVisible) {
-            this.scaleFactor *= 1 + event.detail.spreadChange / event.detail.startSpread;
-            this.scaleFactor = Math.min(Math.max(this.scaleFactor, this.data.minScale), this.data.maxScale);
-            this.el.object3D.scale.x = this.scaleFactor * this.initialScale.x;
-            this.el.object3D.scale.y = this.scaleFactor * this.initialScale.y;
-            this.el.object3D.scale.z = this.scaleFactor * this.initialScale.z;
+            const scaleChange = event.detail.spreadChange;
+            let scaleMultiplier = 1;
+
+            if (scaleChange > 0) {
+                scaleMultiplier = 1.05;
+            } else if (scaleChange < 0) {
+                scaleMultiplier = 0.95;
+            }
+
+            let currentScaleX = this.el.object3D.scale.x;
+            let currentScaleY = this.el.object3D.scale.y;
+            let currentScaleZ = this.el.object3D.scale.z;
+
+            let newScaleX = currentScaleX * scaleMultiplier;
+            let newScaleY = currentScaleY * scaleMultiplier;
+            let newScaleZ = currentScaleZ * scaleMultiplier;
+
+            newScaleX = Math.min(Math.max(newScaleX, this.data.minScale), this.data.maxScale);
+            newScaleY = Math.min(Math.max(newScaleY, this.data.minScale), this.data.maxScale);
+            newScaleZ = Math.min(Math.max(newScaleZ, this.data.minScale), this.data.maxScale);
+
+            this.el.object3D.scale.set(newScaleX, newScaleY, newScaleZ);
         }
     }
 });
